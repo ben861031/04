@@ -8,7 +8,13 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js">
 window.addEventListener('DOMContentLoaded', function(){
 
-    const today = new Date();
+    const auditDateInput =
+        document.getElementById('auditDate');
+
+    const today =
+        auditDateInput && auditDateInput.value
+        ? new Date(auditDateInput.value)
+        : new Date();
 
     const yyyy = today.getFullYear();
     const mm = String(today.getMonth()+1).padStart(2,'0');
@@ -331,6 +337,43 @@ function exportWordReport(){
     URL.revokeObjectURL(url);
 
 }
+
+
+
+// 防右鍵
+document.addEventListener('contextmenu', function(e){
+    e.preventDefault();
+});
+
+// 防 F12 / 防檢視原始碼
+document.addEventListener('keydown', function(e){
+
+    // F12
+    if(e.key === 'F12'){
+        e.preventDefault();
+    }
+
+    // Ctrl + Shift + I
+    if(e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'i'){
+        e.preventDefault();
+    }
+
+    // Ctrl + Shift + J
+    if(e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'j'){
+        e.preventDefault();
+    }
+
+    // Ctrl + Shift + C
+    if(e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'c'){
+        e.preventDefault();
+    }
+
+    // Ctrl + U
+    if(e.ctrlKey && e.key.toLowerCase() === 'u'){
+        e.preventDefault();
+    }
+
+});
 
 </script>
 
@@ -502,7 +545,7 @@ style="padding:8px 12px;border-radius:8px;border:1px solid #ccc;font-size:16px;"
 </select>
 
 <input type="text" id="searchInput"
-placeholder="搜尋文號 / 主旨 / 承辦人">
+placeholder="搜尋表單編號 / 主旨">
 
 <button onclick="copyTableResult()">
 複製查詢結果
@@ -579,6 +622,17 @@ document.getElementById('sheetSelect')
 
 document.getElementById('searchInput')
 .addEventListener('input',filterTable);
+
+
+document.getElementById('auditDate')
+.addEventListener('change',()=>{
+
+    if(originalData.length > 0){
+        recalculateOverdueDays();
+    }
+
+});
+
 
 document.getElementById('docTypeFilter')
 .addEventListener('change',filterTable);
@@ -689,7 +743,13 @@ function loadSelectedSheet(){
 
 function processData(data){
 
-    const today = new Date();
+    const auditDateInput =
+        document.getElementById('auditDate');
+
+    const today =
+        auditDateInput && auditDateInput.value
+        ? new Date(auditDateInput.value)
+        : new Date();
 
 originalData = data.map(item=>{
 
@@ -763,6 +823,56 @@ originalData = data.map(item=>{
 
     renderTable(originalData);
 }
+
+
+function recalculateOverdueDays(){
+
+    const auditDateInput =
+        document.getElementById('auditDate');
+
+    const auditDate =
+        auditDateInput && auditDateInput.value
+        ? new Date(auditDateInput.value)
+        : new Date();
+
+    originalData.forEach(item=>{
+
+        const dueDateValue =
+            item['應歸檔日期'] ||
+            item['限辦日期'] ||
+            item['歸檔日期'];
+
+        let overdueDays = 0;
+
+        if(dueDateValue){
+
+            const dueDate =
+                new Date(dueDateValue);
+
+            if(!isNaN(dueDate)){
+
+                const diffDays =
+                    Math.floor(
+                        (auditDate - dueDate)
+                        / (1000*60*60*24)
+                    );
+
+                if(diffDays > 0){
+                    overdueDays = diffDays;
+                }
+
+            }
+
+        }
+
+        item['已逾期天數'] = overdueDays;
+
+    });
+
+    filterTable();
+
+}
+
 
 function renderTable(data){
 
@@ -908,7 +1018,13 @@ function exportExcel(){
 
 window.addEventListener('DOMContentLoaded', function(){
 
-    const today = new Date();
+    const auditDateInput =
+        document.getElementById('auditDate');
+
+    const today =
+        auditDateInput && auditDateInput.value
+        ? new Date(auditDateInput.value)
+        : new Date();
 
     const yyyy = today.getFullYear();
     const mm = String(today.getMonth()+1).padStart(2,'0');
@@ -1231,6 +1347,43 @@ function exportWordReport(){
     URL.revokeObjectURL(url);
 
 }
+
+
+
+// 防右鍵
+document.addEventListener('contextmenu', function(e){
+    e.preventDefault();
+});
+
+// 防 F12 / 防檢視原始碼
+document.addEventListener('keydown', function(e){
+
+    // F12
+    if(e.key === 'F12'){
+        e.preventDefault();
+    }
+
+    // Ctrl + Shift + I
+    if(e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'i'){
+        e.preventDefault();
+    }
+
+    // Ctrl + Shift + J
+    if(e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'j'){
+        e.preventDefault();
+    }
+
+    // Ctrl + Shift + C
+    if(e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'c'){
+        e.preventDefault();
+    }
+
+    // Ctrl + U
+    if(e.ctrlKey && e.key.toLowerCase() === 'u'){
+        e.preventDefault();
+    }
+
+});
 
 </script>
 
