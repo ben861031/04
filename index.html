@@ -170,17 +170,23 @@ function copyTableResult(){
     const clonedHeaders =
         clonedTable.querySelectorAll('th');
 
-    let removeIndex = -1;
+    const removeIndexes = [];
 
     clonedHeaders.forEach((th,index)=>{
 
-        if(th.innerText.trim() === '公文類型'){
-            removeIndex = index;
+        const txt = th.innerText.trim();
+
+        if(
+            txt === '公文類型' ||
+            txt === '系統判斷類型' ||
+            txt === '最終類型'
+        ){
+            removeIndexes.push(index);
         }
 
     });
 
-    if(removeIndex >= 0){
+    removeIndexes.reverse().forEach(removeIndex=>{
 
         clonedTable.querySelectorAll('tr')
         .forEach(tr=>{
@@ -194,7 +200,7 @@ function copyTableResult(){
 
         });
 
-    }
+    });
 
 
 const titleHtml = `
@@ -251,6 +257,29 @@ function exportWordReport(){
 
     const clonedTable =
         table.cloneNode(true);
+
+    const headersToRemove = clonedTable.querySelectorAll('th');
+    const removeIndexes = [];
+
+    headersToRemove.forEach((th,index)=>{
+        const t = th.innerText.trim();
+        if(
+            t === '公文類型' ||
+            t === '系統判斷類型' ||
+            t === '最終類型'
+        ){
+            removeIndexes.push(index);
+        }
+    });
+
+    removeIndexes.reverse().forEach(removeIndex=>{
+        clonedTable.querySelectorAll('tr').forEach(tr=>{
+            const cells = tr.querySelectorAll('th,td');
+            if(cells[removeIndex]){
+                cells[removeIndex].remove();
+            }
+        });
+    });
 
     clonedTable.style.borderCollapse = 'collapse';
     clonedTable.style.width = '100%';
@@ -337,85 +366,6 @@ function exportWordReport(){
     URL.revokeObjectURL(url);
 
 }
-
-
-
-// 防右鍵
-document.addEventListener('contextmenu', function(e){
-    e.preventDefault();
-});
-
-// 防 F12 / 防檢視原始碼
-document.addEventListener('keydown', function(e){
-
-    // F12
-    if(e.key === 'F12'){
-        e.preventDefault();
-    }
-
-    // Ctrl + Shift + I
-    if(e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'i'){
-        e.preventDefault();
-    }
-
-    // Ctrl + Shift + J
-    if(e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'j'){
-        e.preventDefault();
-    }
-
-    // Ctrl + Shift + C
-    if(e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'c'){
-        e.preventDefault();
-    }
-
-    // Ctrl + U
-    if(e.ctrlKey && e.key.toLowerCase() === 'u'){
-        e.preventDefault();
-    }
-
-});
-
-
-
-// 偵測開發者工具
-setInterval(function(){
-
-    const devtoolsOpened =
-        window.outerWidth - window.innerWidth > 160 ||
-        window.outerHeight - window.innerHeight > 160;
-
-    if(devtoolsOpened){
-
-        document.body.innerHTML = `
-        <div style="
-            height:100vh;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            flex-direction:column;
-            font-family:'Microsoft JhengHei',sans-serif;
-            background:#f5f5f5;
-            color:#333;
-        ">
-            <div style="
-                font-size:32px;
-                font-weight:bold;
-                margin-bottom:12px;
-            ">
-                已偵測開發者工具
-            </div>
-
-            <div style="
-                font-size:18px;
-            ">
-                基於資訊安全考量，系統已停止顯示內容
-            </div>
-        </div>
-        `;
-    }
-
-}, 1000);
-
 
 </script>
 
@@ -857,7 +807,8 @@ originalData = data.map(item=>{
 
         return {
             ...item,
-            '公文類型': docType,
+            '系統判斷類型': docType,
+            '最終類型': docType,
             '已逾期天數': overdueDays
         };
 
@@ -971,7 +922,11 @@ if(h === '總收發文號'){
             const td =
                 document.createElement('td');
 
-            td.innerText = row[h] ?? '';
+            if(h==='最終類型'){
+                td.innerHTML='<button onclick="toggleDocType(\''+(row['總收發文號']??'')+'\')">'+row[h]+' 🔄</button>';
+            }else{
+                td.innerText = row[h] ?? '';
+            }
 
             // 主旨靠左
             if(
@@ -992,12 +947,12 @@ if(h === '總收發文號'){
     // 收發文統計
     const receiveCount =
         originalData.filter(item=>
-            item['公文類型'] === '收文'
+            item['最終類型'] === '收文'
         ).length;
 
     const sendCount =
         originalData.filter(item=>
-            item['公文類型'] === '發文'
+            item['最終類型'] === '發文'
         ).length;
 
     document.getElementById('totalCount')
@@ -1028,7 +983,7 @@ function filterTable(){
 
         const matchType =
             !typeFilter ||
-            item['公文類型'] === typeFilter;
+            item['最終類型'] === typeFilter;
 
         return matchKeyword && matchType;
 
@@ -1037,7 +992,16 @@ function filterTable(){
     renderTable(filtered);
 }
 
+
+function toggleDocType(docNo){
+ const row=originalData.find(item=>item['總收發文號']==docNo);
+ if(!row) return;
+ row['最終類型']=row['最終類型']==='收文'?'發文':'收文';
+ filterTable();
+}
+
 function exportExcel(){
+
 
     const worksheet =
         XLSX.utils.json_to_sheet(originalData);
@@ -1222,17 +1186,23 @@ function copyTableResult(){
     const clonedHeaders =
         clonedTable.querySelectorAll('th');
 
-    let removeIndex = -1;
+    const removeIndexes = [];
 
     clonedHeaders.forEach((th,index)=>{
 
-        if(th.innerText.trim() === '公文類型'){
-            removeIndex = index;
+        const txt = th.innerText.trim();
+
+        if(
+            txt === '公文類型' ||
+            txt === '系統判斷類型' ||
+            txt === '最終類型'
+        ){
+            removeIndexes.push(index);
         }
 
     });
 
-    if(removeIndex >= 0){
+    removeIndexes.reverse().forEach(removeIndex=>{
 
         clonedTable.querySelectorAll('tr')
         .forEach(tr=>{
@@ -1246,7 +1216,7 @@ function copyTableResult(){
 
         });
 
-    }
+    });
 
 
 const titleHtml = `
@@ -1303,6 +1273,29 @@ function exportWordReport(){
 
     const clonedTable =
         table.cloneNode(true);
+
+    const headersToRemove = clonedTable.querySelectorAll('th');
+    const removeIndexes = [];
+
+    headersToRemove.forEach((th,index)=>{
+        const t = th.innerText.trim();
+        if(
+            t === '公文類型' ||
+            t === '系統判斷類型' ||
+            t === '最終類型'
+        ){
+            removeIndexes.push(index);
+        }
+    });
+
+    removeIndexes.reverse().forEach(removeIndex=>{
+        clonedTable.querySelectorAll('tr').forEach(tr=>{
+            const cells = tr.querySelectorAll('th,td');
+            if(cells[removeIndex]){
+                cells[removeIndex].remove();
+            }
+        });
+    });
 
     clonedTable.style.borderCollapse = 'collapse';
     clonedTable.style.width = '100%';
@@ -1390,85 +1383,29 @@ function exportWordReport(){
 
 }
 
+</script>
 
 
-// 防右鍵
+<script>
 document.addEventListener('contextmenu', function(e){
-    e.preventDefault();
+  e.preventDefault();
 });
 
-// 防 F12 / 防檢視原始碼
 document.addEventListener('keydown', function(e){
-
-    // F12
-    if(e.key === 'F12'){
-        e.preventDefault();
-    }
-
-    // Ctrl + Shift + I
-    if(e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'i'){
-        e.preventDefault();
-    }
-
-    // Ctrl + Shift + J
-    if(e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'j'){
-        e.preventDefault();
-    }
-
-    // Ctrl + Shift + C
-    if(e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'c'){
-        e.preventDefault();
-    }
-
-    // Ctrl + U
-    if(e.ctrlKey && e.key.toLowerCase() === 'u'){
-        e.preventDefault();
-    }
-
+  if (e.key === 'F12' || e.keyCode === 123) {
+    e.preventDefault();
+    return false;
+  }
+  if (e.ctrlKey && e.shiftKey &&
+      (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j')) {
+    e.preventDefault();
+    return false;
+  }
+  if (e.ctrlKey && (e.key === 'U' || e.key === 'u')) {
+    e.preventDefault();
+    return false;
+  }
 });
-
-
-
-// 偵測開發者工具
-setInterval(function(){
-
-    const devtoolsOpened =
-        window.outerWidth - window.innerWidth > 160 ||
-        window.outerHeight - window.innerHeight > 160;
-
-    if(devtoolsOpened){
-
-        document.body.innerHTML = `
-        <div style="
-            height:100vh;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            flex-direction:column;
-            font-family:'Microsoft JhengHei',sans-serif;
-            background:#f5f5f5;
-            color:#333;
-        ">
-            <div style="
-                font-size:32px;
-                font-weight:bold;
-                margin-bottom:12px;
-            ">
-                已偵測開發者工具
-            </div>
-
-            <div style="
-                font-size:18px;
-            ">
-                基於資訊安全考量，系統已停止顯示內容
-            </div>
-        </div>
-        `;
-    }
-
-}, 1000);
-
-
 </script>
 
 </body>
