@@ -603,6 +603,8 @@ style="font-size:22px;"></div>
 let workbookData = null;
 let originalData = [];
 
+let manualTypeMap = JSON.parse(localStorage.getItem('manualTypeMap') || '{}');
+
 document.getElementById('excelFile')
 .addEventListener('change',handleFile);
 
@@ -802,10 +804,12 @@ originalData = data.map(item=>{
             }
         }
 
+        const docNo = item['總收發文號'];
+
         return {
             ...item,
             '系統判斷類型': docType,
-            '最終類型': docType,
+            '最終類型': manualTypeMap[docNo] || docType,
             '已逾期天數': overdueDays
         };
 
@@ -991,9 +995,20 @@ function filterTable(){
 
 
 function toggleDocType(docNo){
+
  const row=originalData.find(item=>item['總收發文號']==docNo);
+
  if(!row) return;
+
  row['最終類型']=row['最終類型']==='收文'?'發文':'收文';
+
+ manualTypeMap[docNo]=row['最終類型'];
+
+ localStorage.setItem(
+   'manualTypeMap',
+   JSON.stringify(manualTypeMap)
+ );
+
  filterTable();
 }
 
