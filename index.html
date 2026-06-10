@@ -517,9 +517,12 @@ box-shadow:0 2px 8px rgba(0,0,0,0.08);
 📅 稽催日期：
 <input type="date" id="auditDate"
 style="padding:8px 12px;border-radius:8px;border:1px solid #ccc;font-size:16px;">
+
+
 </div>
 
 <div class="toolbar">
+
 
 <input type="file" id="excelFile" accept=".xlsx,.xls">
 
@@ -535,6 +538,12 @@ style="padding:8px 12px;border-radius:8px;border:1px solid #ccc;font-size:16px;"
 
 <input type="text" id="searchInput"
 placeholder="搜尋表單編號 / 主旨">
+
+<label style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:bold;">
+判斷基準
+<input type="number" id="thresholdInput" min="1" style="width:80px;text-align:center;">
+天
+</label>
 
 <button onclick="copyTableResult()">
 複製查詢結果
@@ -604,6 +613,7 @@ let workbookData = null;
 let originalData = [];
 
 let manualTypeMap = JSON.parse(localStorage.getItem('manualTypeMap') || '{}');
+let DOC_TYPE_THRESHOLD = parseInt(localStorage.getItem('docTypeThreshold')) || 14;
 
 document.getElementById('excelFile')
 .addEventListener('change',handleFile);
@@ -798,7 +808,7 @@ originalData = data.map(item=>{
                     );
 
                 docType =
-                    processDays >= 14
+                    processDays >= DOC_TYPE_THRESHOLD
                     ? '收文'
                     : '發文';
             }
@@ -1011,6 +1021,42 @@ function toggleDocType(docNo){
 
  filterTable();
 }
+
+
+
+window.addEventListener('DOMContentLoaded',()=>{
+
+    const thresholdInput = document.getElementById('thresholdInput');
+    if(!thresholdInput) return;
+
+    thresholdInput.value = DOC_TYPE_THRESHOLD;
+
+    function saveThreshold(){
+        const value = parseInt(thresholdInput.value);
+
+        if(isNaN(value) || value <= 0){
+            alert('請輸入正確天數');
+            thresholdInput.value = DOC_TYPE_THRESHOLD;
+            return;
+        }
+
+        DOC_TYPE_THRESHOLD = value;
+        localStorage.setItem('docTypeThreshold', value);
+
+        if(originalData.length){
+            loadSelectedSheet();
+        }
+    }
+
+    thresholdInput.addEventListener('change', saveThreshold);
+
+    thresholdInput.addEventListener('keydown', function(e){
+        if(e.key === 'Enter'){
+            saveThreshold();
+        }
+    });
+});
+
 
 function exportExcel(){
 
