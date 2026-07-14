@@ -1060,9 +1060,29 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 function exportExcel(){
 
+    const sheetName =
+        document.getElementById('sheetSelect').value;
+
+    const exportData = originalData.map(row=>{
+
+        const {
+            '部門': existingDepartment,
+            ...rest
+        } = row;
+
+        return {
+            '部門':
+                existingDepartment ||
+                row['單位'] ||
+                row['承辦單位'] ||
+                sheetName,
+            ...rest
+        };
+
+    });
 
     const worksheet =
-        XLSX.utils.json_to_sheet(originalData);
+        XLSX.utils.json_to_sheet(exportData);
 
     const workbook =
         XLSX.utils.book_new();
