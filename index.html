@@ -373,17 +373,19 @@ function exportWordReport(){
 :root{--navy:#12304a;--blue:#1f5f8b;--teal:#15927e;--ink:#172b3a;--muted:#647786;--line:#dce6ec;--surface:#fff;--canvas:#eef4f7;--warning:#fff5dc;--shadow:0 14px 34px rgba(23,43,58,.08)}
 *{box-sizing:border-box;font-family:"Microsoft JhengHei","Noto Sans TC",sans-serif}
 body{margin:0;background:var(--canvas);color:var(--ink);min-height:100vh}
-.header{background:#182e4a;color:#fff;padding:16px max(24px,calc((100vw - 1500px)/2));box-shadow:0 2px 8px rgba(0,0,0,.15)}
-.header-title{font-size:22px;font-weight:700;letter-spacing:.05em}
+.header{background:#182e4a;color:#fff;padding:0 max(24px,calc((100vw - 1500px)/2));box-shadow:0 2px 8px rgba(0,0,0,.15);display:flex;justify-content:space-between;align-items:center;height:64px;position:sticky;top:0;z-index:100}
+.header-title{font-size:20px;font-weight:700;letter-spacing:.05em}
+.header-actions{display:flex;align-items:center;gap:12px}
+.header-actions button{min-height:36px;padding:6px 16px;font-size:14px;border-radius:6px;box-shadow:none}
 .container{width:min(1500px,calc(100% - 40px));margin:0 auto;padding:28px 0 42px}
 .panel{background:var(--surface);border:1px solid rgba(220,230,236,.9);border-radius:18px;box-shadow:var(--shadow)}
 
 .control-panel{padding:20px;margin-bottom:18px}.section-heading{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:16px}.section-title{font-size:17px;font-weight:800}.section-note{font-size:13px;color:var(--muted)}
 .toolbar{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;align-items:end}.field{display:flex;flex-direction:column;gap:8px}.field-label{font-size:13px;font-weight:700;color:#334155}.threshold-field{display:flex;align-items:center;gap:4px;min-height:46px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px;font-weight:700;transition:border-color .2s,box-shadow .2s}.threshold-field:focus-within{border-color:var(--teal);box-shadow:0 0 0 3px rgba(21,146,126,.14)}.threshold-field input{width:48px;text-align:right;padding:8px 4px;border:none;background:transparent;min-height:auto;box-shadow:none;outline:none}
 input,select{width:100%;min-height:46px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s}input[type=file]{padding:8px 10px;color:var(--muted)}input[type=file]::file-selector-button{border:none;background:#edf3f6;color:var(--navy);padding:6px 12px;border-radius:6px;cursor:pointer;margin-right:12px;font-weight:700;transition:background .2s}input[type=file]::file-selector-button:hover{background:#dfeaf0}input:focus,select:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(21,146,126,.14)}
-.action-bar{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}button{min-height:42px;background:var(--blue);color:#fff;border:0;padding:10px 16px;border-radius:10px;cursor:pointer;font-weight:700;transition:transform .15s,background .15s,box-shadow .15s}button:hover{background:#174d72;box-shadow:0 6px 16px rgba(31,95,139,.2);transform:translateY(-1px)}button:focus-visible{outline:3px solid rgba(21,146,126,.3);outline-offset:2px}.button-secondary{background:#edf3f6;color:var(--navy)}.button-secondary:hover{background:#dfeaf0}.button-primary{background:var(--teal)}.button-primary:hover{background:#117967}
-.summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:18px}.card{position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:0 8px 24px rgba(23,43,58,.05)}.card:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--teal)}.card:nth-child(2):before{background:#e3a43a}.card:nth-child(3):before{background:var(--blue)}.card:nth-child(4):before{background:#8e44ad}.card-title{color:var(--muted);font-size:13px;font-weight:700;margin-bottom:8px}.card-number{font-size:30px;font-weight:800;color:var(--navy);line-height:1.2}.card-unit{font-size:13px;font-weight:500;color:var(--muted);margin-left:5px}
-.data-panel{overflow:hidden}.table-header{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;border-bottom:1px solid var(--line)}.table-title{font-size:18px;font-weight:800}.table-hint{font-size:13px;color:var(--muted)}.table-wrap{overflow:auto;max-height:65vh}table{width:100%;border-collapse:separate;border-spacing:0;min-width:1450px}thead{position:sticky;top:0;z-index:2;background:var(--navy);color:#fff}th,td{padding:16px 16px;text-align:center;border-bottom:1px solid #e7eef2;font-size:16px;line-height:1.55}td{white-space:nowrap}th{padding-top:15px;padding-bottom:15px;font-size:14px;font-weight:800;letter-spacing:.03em;white-space:nowrap}tbody tr{background:#fff;transition:background .15s}tbody tr:nth-child(even){background:#f8fbfc}tbody tr:hover{background:#eaf5f4}tbody td button{font-size:14px}.overdue{background:#fff2f0!important;color:#cf1322!important;font-weight:600}.subject-cell{text-align:left!important;min-width:460px;line-height:1.75;white-space:normal!important}.empty-state td{padding:64px 20px!important;color:var(--muted);font-size:16px}.empty-icon{display:block;font-size:30px;margin-bottom:8px}
+.action-bar{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}button{min-height:42px;background:var(--blue);color:#fff;border:0;padding:10px 16px;border-radius:10px;cursor:pointer;font-weight:700;transition:transform .15s,background .15s,box-shadow .15s}button:hover{background:#174d72;box-shadow:0 6px 16px rgba(31,95,139,.2);transform:translateY(-1px)}button:focus-visible{outline:3px solid rgba(21,146,126,.3);outline-offset:2px}.button-secondary{background:#edf3f6;color:var(--navy)}.button-secondary:hover{background:#dfeaf0}.button-primary{background:var(--teal)}.button-primary:hover{background:#117967}.btn-danger{background:#fff1f0;color:#cf1322}.btn-danger:hover{background:#ffa39e}.btn-word{background:#e6f7ff;color:#0958d9}.btn-word:hover{background:#bae0ff}.btn-excel{background:#f6ffed;color:#389e0d}.btn-excel:hover{background:#d9f7be}.btn-magic{background:linear-gradient(135deg,var(--teal),#0f6c5d);box-shadow:0 4px 12px rgba(21,146,126,.2)}.btn-magic:hover{background:linear-gradient(135deg,#117967,#0b5347)}
+.summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:18px}.card{position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:0 8px 24px rgba(23,43,58,.05)}.card:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--teal)}.card:nth-child(2):before{background:#e3a43a}.card:nth-child(3):before{background:var(--blue)}.card:nth-child(4):before{background:#8e44ad}.card-title{color:var(--muted);font-size:13px;font-weight:700;margin-bottom:8px}.card-number{font-size:30px;font-weight:800;color:var(--navy);line-height:1.2}.card-unit{font-size:13px;font-weight:500;color:var(--muted);margin-left:5px}
+.data-panel{overflow:hidden}.table-header{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;border-bottom:1px solid var(--line)}.table-title{font-size:18px;font-weight:800}.table-hint{font-size:13px;color:var(--muted)}.table-wrap{overflow:auto;max-height:calc(100vh - 350px)}table{width:100%;border-collapse:separate;border-spacing:0;min-width:1450px}thead{position:sticky;top:0;z-index:2;color:#fff}thead th{background:var(--navy)}th,td{padding:16px 16px;text-align:center;border-bottom:1px solid #e7eef2;font-size:16px;line-height:1.55}td{white-space:nowrap}th{padding-top:15px;padding-bottom:15px;font-size:14px;font-weight:800;letter-spacing:.03em;white-space:nowrap}tbody tr{background:#fff;transition:background .15s}tbody tr:nth-child(even){background:#f8fbfc}tbody tr:hover{background:#eaf5f4}tbody td button{font-size:14px}.subject-cell{text-align:left!important;min-width:460px;line-height:1.75;white-space:normal!important}.subject-cell a{color:#1a73e8;text-decoration:none}.subject-cell a:hover{text-decoration:underline;color:#0d47a1}.empty-state td{padding:64px 20px!important;color:var(--muted);font-size:16px}.empty-icon{display:block;font-size:30px;margin-bottom:8px}
 @media(max-width:1050px){.threshold-field{min-height:46px}.summary{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:700px){.header{padding:24px 20px}.container{width:min(100% - 24px,1500px);padding-top:18px}.toolbar{grid-template-columns:1fr}.action-bar{display:grid;grid-template-columns:1fr}.summary{grid-template-columns:1fr}.section-heading,.table-header{align-items:flex-start;flex-direction:column}.card{padding:16px 18px}.table-wrap{max-height:58vh}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
@@ -393,10 +395,10 @@ input,select{width:100%;min-height:46px;padding:10px 12px;border:1px solid var(-
 .toast { background: #fff; border-left: 4px solid var(--teal); box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: bold; color: var(--navy); animation: slideIn 0.3s ease forwards; transition: opacity 0.3s; }
 @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 /* Dropzone styles */
-.control-panel.drag-over { border: 2px dashed var(--teal); background: #f0f9f7; }
+body.drag-over::after { content: "拖曳放開以匯入 Excel"; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(21, 146, 126, 0.9); color: white; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; z-index: 9999; pointer-events: none; }
 /* Sort header styles */
 th.sortable { cursor: pointer; user-select: none; transition: background 0.2s; }
-th.sortable:hover { background: rgba(0,0,0,0.05); }
+th.sortable:hover { background: #1a4266; }
 th.sortable::after { content: ' \2195'; opacity: 0.3; margin-left: 4px; display: inline-block; }
 th.sortable.sort-asc::after { content: ' \2191'; opacity: 1; }
 th.sortable.sort-desc::after { content: ' \2193'; opacity: 1; }
@@ -414,15 +416,23 @@ th.sortable.sort-desc::after { content: ' \2193'; opacity: 1; }
 
 <header class="header">
 <div class="header-title">公文逾期稽催管理系統</div>
+<div class="header-actions">
+    <div id="lastFileInfo" style="font-size:13px; color:#a1b8c7; text-align:right; margin-right:8px; line-height:1.4;">
+        <span style="font-weight:700;font-size:14px;color:#fff;">尚未匯入資料</span><br>
+        等待匯入
+    </div>
+    <input type="file" id="excelFile" accept=".xlsx,.xls" style="display:none;">
+    <button class="button-secondary" onclick="document.getElementById('excelFile').click()">匯入 Excel</button>
+    <button class="button-primary btn-magic" onclick="openSmartImportModal()">智慧匯入</button>
+</div>
 </header>
 
 <div class="container">
 
-<section class="panel control-panel" id="dropZone" aria-labelledby="filterHeading">
-<div class="section-heading"><div><div class="section-title" id="filterHeading">資料匯入與篩選</div></div></div>
+<section class="panel control-panel" aria-labelledby="filterHeading">
+<div class="section-heading"><div><div class="section-title" id="filterHeading">資料篩選與匯出</div></div></div>
 <div class="toolbar">
 <label class="field"><span class="field-label">稽催基準日</span><input type="date" id="auditDate" aria-label="稽催日期"></label>
-<label class="field"><span class="field-label">匯入資料</span><input type="file" id="excelFile" accept=".xlsx,.xls"></label>
 <label class="field"><span class="field-label">公文類型</span><select id="docTypeFilter">
 <option value="收文" selected>收文</option>
 <option value="發文">發文</option>
@@ -434,7 +444,7 @@ th.sortable.sort-desc::after { content: ' \2193'; opacity: 1; }
 <label class="field"><span class="field-label">關鍵字搜尋</span><input type="search" id="searchInput" placeholder="搜尋表單編號或主旨"></label>
 <label class="field"><span class="field-label">類型判斷基準</span><span class="threshold-field"><input type="number" id="thresholdInput" min="1" aria-label="類型判斷天數"> 天</span></label>
 </div>
-<div class="action-bar"><button class="button-secondary" onclick="clearData()">清除資料</button><button class="button-secondary" onclick="copyTableResult()">複製查詢結果</button><button class="button-secondary" onclick="exportWordReport()">匯出 Word</button><button class="button-primary" onclick="exportExcel()">匯出 Excel</button></div>
+<div class="action-bar"><button class="button-secondary btn-danger" onclick="clearData()">清除資料</button><button class="button-secondary" onclick="copyTableResult()">複製查詢結果</button><button class="button-secondary btn-word" onclick="exportWordReport()">匯出 Word</button><button class="button-primary btn-excel" onclick="exportExcel()">匯出 Excel</button></div>
 </section>
 
 <div class="summary">
@@ -452,11 +462,6 @@ th.sortable.sort-desc::after { content: ' \2193'; opacity: 1; }
 <div class="card">
 <div class="card-title">目前分頁</div>
 <div class="card-number" id="currentSheet" style="font-size:22px;">尚未匯入</div>
-</div>
-
-<div class="card">
-<div class="card-title">最後載入檔案</div>
-<div class="card-number" id="lastFileInfo" style="font-size:16px; line-height: 1.4;">尚未匯入</div>
 </div>
 
 </div>
@@ -481,6 +486,18 @@ th.sortable.sort-desc::after { content: ' \2193'; opacity: 1; }
 
 </div>
 </section>
+</div>
+
+<div id="smartImportModal" class="modal-overlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:10000; align-items:center; justify-content:center;">
+    <div class="modal-content" style="background:#fff; border-radius:12px; padding:24px; width:90%; max-width:600px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+        <h3 style="margin-top:0; margin-bottom:16px; color:var(--navy); font-size:18px;">智慧匯入</h3>
+        <div style="margin-bottom:8px; font-size:14px; color:var(--muted);">請在下方區塊點擊後，按下 <strong>Ctrl+V</strong> 貼上表格資料：</div>
+        <div id="smartImportPasteZone" contenteditable="true" style="border:2px dashed var(--teal); padding:16px; min-height:150px; max-height:400px; overflow-y:auto; background:#f0f9f7; border-radius:8px; outline:none; word-break:break-all;" data-placeholder="貼上資料..."></div>
+        <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:12px;">
+            <button class="button-secondary" onclick="closeSmartImportModal()">取消</button>
+            <button class="button-primary" onclick="confirmSmartImport()">匯入資料</button>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -511,6 +528,7 @@ function clearData() {
     document.getElementById('lastFileInfo').innerHTML = '尚未匯入';
     renderTable([]);
     localStorage.removeItem('savedExcelData');
+    localStorage.removeItem('savedSmartImportData');
     localStorage.removeItem('currentSheet');
     localStorage.removeItem('lastFileName');
     localStorage.removeItem('lastFileTime');
@@ -544,6 +562,13 @@ function updateDocType(docNo, newType){
 }
 
 function processFile(file) {
+    if (workbookData && workbookData.SheetNames && workbookData.SheetNames.length > 0) {
+        if (!confirm('目前系統內已有資料。匯入新檔案將會完全覆蓋現有資料，確定要繼續嗎？')) {
+            const fileInput = document.getElementById('fileInput');
+            if(fileInput) fileInput.value = '';
+            return;
+        }
+    }
     const reader = new FileReader();
     reader.onload = function(evt){
         const data = new Uint8Array(evt.target.result);
@@ -576,34 +601,45 @@ function processFile(file) {
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
-    const dropZone = document.getElementById('dropZone');
-    if(dropZone) {
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('drag-over');
-        });
-        dropZone.addEventListener('dragleave', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('drag-over');
-        });
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('drag-over');
-            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                const file = e.dataTransfer.files[0];
-                if (file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) {
-                    document.getElementById('excelFile').files = e.dataTransfer.files;
-                    processFile(file);
-                } else {
-                    showToast('請上傳 Excel 檔案 (.xlsx, .xls)');
-                }
+    document.body.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        document.body.classList.add('drag-over');
+    });
+    document.body.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        if (e.relatedTarget === null) {
+            document.body.classList.remove('drag-over');
+        }
+    });
+    document.body.addEventListener('drop', (e) => {
+        e.preventDefault();
+        document.body.classList.remove('drag-over');
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            const file = e.dataTransfer.files[0];
+            if (file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) {
+                document.getElementById('excelFile').files = e.dataTransfer.files;
+                processFile(file);
+            } else {
+                showToast('請上傳 Excel 檔案 (.xlsx, .xls)');
             }
-        });
-    }
+        }
+    });
 
     const savedData = localStorage.getItem('savedExcelData');
-    if (savedData) {
-        let isReadSuccess = false;
+    const savedSmartData = localStorage.getItem('savedSmartImportData');
+    let isReadSuccess = false;
+    
+    if (savedSmartData) {
+        try {
+            workbookData = JSON.parse(savedSmartData);
+            isReadSuccess = true;
+        } catch (e) {
+            console.error('Failed to parse smart import data', e);
+            localStorage.removeItem('savedSmartImportData');
+            localStorage.removeItem('lastFileName');
+            localStorage.removeItem('lastFileTime');
+        }
+    } else if (savedData) {
         try {
             const binaryString = atob(savedData);
             const bytes = new Uint8Array(binaryString.length);
@@ -618,22 +654,22 @@ document.addEventListener('DOMContentLoaded',()=>{
             localStorage.removeItem('lastFileName');
             localStorage.removeItem('lastFileTime');
         }
+    }
 
-        if (isReadSuccess) {
-            try {
-                const savedSheet = localStorage.getItem('currentSheet');
-                loadSheetList(savedSheet);
-                
-                const lastFileName = localStorage.getItem('lastFileName');
-                const lastFileTime = localStorage.getItem('lastFileTime');
-                if(lastFileName) {
-                    updateLastFileInfo(lastFileName, lastFileTime);
-                }
-                
-                showToast('已還原上次的資料');
-            } catch (e) {
-                console.error('Failed to render saved data', e);
+    if (isReadSuccess) {
+        try {
+            const savedSheet = localStorage.getItem('currentSheet');
+            loadSheetList(savedSheet);
+            
+            const lastFileName = localStorage.getItem('lastFileName');
+            const lastFileTime = localStorage.getItem('lastFileTime');
+            if(lastFileName) {
+                updateLastFileInfo(lastFileName, lastFileTime);
             }
+            
+            showToast('已還原上次的資料');
+        } catch (e) {
+            console.error('Failed to render saved data', e);
         }
     }
 });
@@ -641,7 +677,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 function updateLastFileInfo(name, time) {
     const el = document.getElementById('lastFileInfo');
     if(el) {
-        el.innerHTML = `<span style="font-size:16px;font-weight:700">${name}</span><br><span style="font-size:13px;color:var(--muted)">${time}</span>`;
+        el.innerHTML = `<span style="font-size:14px;font-weight:700;color:#fff;">${name}</span><br>${time}`;
     }
 }
 
@@ -734,7 +770,7 @@ function loadSelectedSheet(){
                 }
             });
             // 補上部門資訊（如果原本沒有）
-            if (!obj['部門'] && !obj['單位'] && !obj['承辦單位']) {
+            if (!obj['部門'] && !obj['單位'] && !obj['承辦單位'] && !obj['承辦部門']) {
                 obj['部門'] = name;
             }
             return obj;
@@ -900,7 +936,7 @@ function renderTable(data){
     if(data.length === 0){
         const emptyRow = document.createElement('tr');
         emptyRow.className = 'empty-state';
-        emptyRow.innerHTML = '<td colspan="100"><span class="empty-icon">📄</span>目前沒有符合條件的案件</td>';
+        emptyRow.innerHTML = '<td colspan="100">目前沒有符合條件的案件</td>';
         body.appendChild(emptyRow);
         return;
     }
@@ -949,7 +985,32 @@ function renderTable(data){
                                   <option value="發文" ${isS}>發文</option>
                                 </select>`;
             }else{
-                td.innerText = row[h] ?? '';
+                const val = row[h] ?? '';
+                if ((h.includes('主旨') || h.includes('案由')) && typeof val === 'string' && val.includes('<a') && val.includes('</a>')) {
+                    const template = document.createElement('template');
+                    template.innerHTML = val;
+                    td.textContent = '';
+                    Array.from(template.content.childNodes).forEach(node => {
+                        if (node.nodeType === Node.TEXT_NODE) {
+                            td.appendChild(document.createTextNode(node.textContent));
+                        } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() === 'a') {
+                            const a = document.createElement('a');
+                            const href = node.getAttribute('href') || '';
+                            if (href.startsWith('http://') || href.startsWith('https://')) {
+                                a.href = href;
+                            } else {
+                                a.href = '#';
+                            }
+                            a.textContent = node.textContent;
+                            if(node.hasAttribute('target')) a.target = node.getAttribute('target');
+                            td.appendChild(a);
+                        } else {
+                            td.appendChild(document.createTextNode(node.textContent));
+                        }
+                    });
+                } else {
+                    td.innerText = val;
+                }
             }
 
             // 主旨靠左
@@ -1102,6 +1163,7 @@ function exportExcel(){
 
     const sheetName =
         document.getElementById('sheetSelect').value;
+    const isAllDepartments = sheetName === '全部部門' || sheetName === '請先匯入Excel';
 
     const exportData = originalData.map(row=>{
 
@@ -1109,6 +1171,20 @@ function exportExcel(){
             '部門': existingDepartment,
             ...rest
         } = row;
+        
+        let cleanedRest = {...rest};
+        
+        Object.keys(cleanedRest).forEach(k => {
+            if ((k.includes('主旨') || k.includes('案由')) && typeof cleanedRest[k] === 'string' && cleanedRest[k].includes('<a')) {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = cleanedRest[k];
+                cleanedRest[k] = tempDiv.innerText || tempDiv.textContent;
+            }
+        });
+
+        if (!isAllDepartments) {
+            return cleanedRest;
+        }
 
         return {
             '部門':
@@ -1116,7 +1192,7 @@ function exportExcel(){
                 row['單位'] ||
                 row['承辦單位'] ||
                 sheetName,
-            ...rest
+            ...cleanedRest
         };
 
     });
@@ -1306,6 +1382,9 @@ function copyTableResult(){
 
     const removeIndexes = [];
 
+    const sheetName = document.getElementById('sheetSelect').value;
+    const isAllDepartments = sheetName === '全部部門' || sheetName === '請先匯入Excel';
+
     clonedHeaders.forEach((th,index)=>{
 
         const txt = th.innerText.trim();
@@ -1313,7 +1392,8 @@ function copyTableResult(){
         if(
             txt === '公文類型' ||
             txt === '系統判斷類型' ||
-            txt === '最終類型'
+            txt === '最終類型' ||
+            (!isAllDepartments && txt === '部門')
         ){
             removeIndexes.push(index);
         }
@@ -1395,12 +1475,16 @@ function exportWordReport(){
     const headersToRemove = clonedTable.querySelectorAll('th');
     const removeIndexes = [];
 
+    const sheetName = document.getElementById('sheetSelect').value;
+    const isAllDepartments = sheetName === '全部部門' || sheetName === '請先匯入Excel';
+
     headersToRemove.forEach((th,index)=>{
         const t = th.innerText.trim();
         if(
             t === '公文類型' ||
             t === '系統判斷類型' ||
-            t === '最終類型'
+            t === '最終類型' ||
+            (!isAllDepartments && t === '部門')
         ){
             removeIndexes.push(index);
         }
@@ -1499,6 +1583,177 @@ function exportWordReport(){
 
     URL.revokeObjectURL(url);
 
+}
+
+let pendingSmartImport = null;
+
+function openSmartImportModal() {
+    pendingSmartImport = null;
+    const pasteZone = document.getElementById('smartImportPasteZone');
+    pasteZone.innerHTML = '';
+    document.getElementById('smartImportModal').style.display = 'flex';
+    setTimeout(() => pasteZone.focus(), 100);
+}
+
+function closeSmartImportModal() {
+    document.getElementById('smartImportModal').style.display = 'none';
+}
+
+function confirmSmartImport() {
+    try {
+        if (!pendingSmartImport) {
+            showToast('請先貼上資料');
+            return;
+        }
+        if (workbookData && workbookData.SheetNames && workbookData.SheetNames.length > 0) {
+            if (!confirm('目前系統內已有資料。智慧匯入將會完全覆蓋現有資料，確定要繼續嗎？')) {
+                return;
+            }
+        }
+        handleSmartImport(pendingSmartImport.html, pendingSmartImport.text);
+    } catch(err) {
+        console.error('Smart import error:', err);
+    } finally {
+        closeSmartImportModal();
+        pendingSmartImport = null;
+    }
+}
+
+document.getElementById('smartImportPasteZone').addEventListener('paste', (e) => {
+    e.preventDefault();
+    const html = e.clipboardData.getData('text/html');
+    const text = e.clipboardData.getData('text/plain');
+
+    if (html || text) {
+        pendingSmartImport = { html, text };
+        document.getElementById('smartImportPasteZone').innerHTML = '<div style="color:var(--teal); font-weight:bold; text-align:center; padding: 40px 0; font-size:16px;">✅ 資料已讀取，正在自動匯入...</div>';
+        setTimeout(() => {
+            confirmSmartImport();
+        }, 300);
+    }
+});
+
+function handleSmartImport(html, text) {
+    const linkMap = {};
+    if (html) {
+        const div = document.createElement('div');
+        div.innerHTML = html;
+        const links = div.querySelectorAll('a');
+        links.forEach(a => {
+            const aText = a.innerText.trim();
+            if (aText) {
+                a.setAttribute('target', '_blank');
+                a.setAttribute('style', 'color: inherit; text-decoration: underline;');
+                linkMap[aText] = a.outerHTML;
+            }
+        });
+    }
+
+    const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l !== '');
+    if (lines.length === 0) return;
+
+    let headers = [];
+    let parsedData = [];
+    let headerIndex = -1;
+
+    for (let i = 0; i < lines.length; i++) {
+        if (lines[i].includes('總收發文號') && lines[i].includes('主旨')) {
+            headers = lines[i].split('\t').map(h => {
+                let text = h.trim();
+                if (text === '承辦部門' || text === '承辦單位' || text === '單位') {
+                    return '部門';
+                }
+                return text;
+            });
+            headerIndex = i;
+            break;
+        }
+    }
+
+    if (headerIndex === -1) {
+        showToast('找不到表頭 (需包含總收發文號、主旨等)');
+        return;
+    }
+
+    let i = headerIndex + 1;
+    while (i < lines.length) {
+        let parts = lines[i].split('\t');
+        
+        if (i + 1 < lines.length) {
+            let nextParts = lines[i+1].split('\t');
+            if (parts.length + nextParts.length === headers.length) {
+                parts = parts.concat(nextParts);
+                i++; 
+            }
+        }
+        
+        let tempRowData = {};
+        headers.forEach((header, idx) => {
+            let val = (parts[idx] || '').trim();
+            if (linkMap[val] && (header.includes('主旨') || header.includes('案由'))) {
+                tempRowData[header] = linkMap[val];
+            } else {
+                tempRowData[header] = val;
+            }
+        });
+
+        if (!tempRowData['部門']) {
+            tempRowData['部門'] = '智慧匯入';
+        }
+        
+        let rowData = {};
+        const standardOrder = ['總收發文號', '收文日期', '主旨', '應歸檔日期', '部門'];
+        standardOrder.forEach(k => {
+            if (tempRowData[k] !== undefined) {
+                rowData[k] = tempRowData[k];
+            }
+        });
+        Object.keys(tempRowData).forEach(k => {
+            if (!standardOrder.includes(k)) {
+                rowData[k] = tempRowData[k];
+            }
+        });
+        
+        if (Object.values(rowData).some(v => v !== '' && v !== '智慧匯入')) {
+            parsedData.push(rowData);
+        }
+        
+        i++;
+    }
+
+    if (parsedData.length > 0) {
+        const departments = [...new Set(parsedData.map(d => d['部門']))];
+        const newWorkbook = { SheetNames: [], Sheets: {} };
+        
+        departments.forEach(dept => {
+            newWorkbook.SheetNames.push(dept);
+            const deptData = parsedData.filter(d => d['部門'] === dept);
+            newWorkbook.Sheets[dept] = XLSX.utils.json_to_sheet(deptData);
+        });
+
+        workbookData = newWorkbook;
+        
+        try {
+            localStorage.setItem('savedSmartImportData', JSON.stringify(workbookData));
+            localStorage.removeItem('savedExcelData');
+        } catch(e) {
+            console.error('Failed to save smart import data', e);
+            showToast('警告：資料過大，可能無法跨次保留');
+        }
+        const now = new Date();
+        const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+        localStorage.setItem('lastFileName', '從剪貼簿智慧匯入');
+        localStorage.setItem('lastFileTime', timeStr);
+        
+        loadSheetList();
+        
+        const lastFileName = localStorage.getItem('lastFileName') || '從剪貼簿智慧匯入';
+        const lastFileTime = localStorage.getItem('lastFileTime') || new Date().toLocaleString();
+        updateLastFileInfo(lastFileName, lastFileTime);
+        showToast(`成功智慧匯入 ${parsedData.length} 筆資料`);
+    } else {
+        showToast('無法解析剪貼簿中的資料');
+    }
 }
 
 </script>
