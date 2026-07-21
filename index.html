@@ -508,7 +508,12 @@ let originalData = [];
 let currentSort = { key: '', dir: 'asc' };
 
 function showToast(message) {
-    const container = document.getElementById('toastContainer');
+    let container = document.getElementById('toastContainer');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toastContainer';
+        document.body.appendChild(container);
+    }
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.innerText = message;
@@ -520,6 +525,7 @@ function showToast(message) {
 }
 
 function clearData() {
+    if (!confirm('確定要清除所有匯入的資料嗎？\n（此動作將清空畫面上與暫存的資料，且無法復原）')) return;
     workbookData = null;
     originalData = [];
     document.getElementById('sheetSelect').innerHTML = '<option>請先匯入Excel</option>';
