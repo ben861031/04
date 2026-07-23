@@ -313,8 +313,21 @@ function exportWordReport(){
     <html>
     <head>
     <meta charset="utf-8">
+    <style>
+        @page WordSection1 {
+            size: 841.9pt 595.3pt;
+            margin: 1.0in 1.0in 1.0in 1.0in;
+            mso-header-margin: .5in;
+            mso-footer-margin: .5in;
+            mso-paper-source: 0;
+        }
+        div.WordSection1 {
+            page: WordSection1;
+        }
+    </style>
     </head>
     <body>
+    <div class="WordSection1">
 
     <div style="text-align:center;margin-bottom:10px;">
         <div style="
@@ -337,6 +350,7 @@ function exportWordReport(){
 
     ${clonedTable.outerHTML}
 
+    </div>
     </body>
     </html>
     `;
@@ -1514,40 +1528,61 @@ function exportWordReport(){
         });
     });
 
+    const noWrapCenterCols = [];
+    if(clonedTable.querySelector('tr')){
+        clonedTable.querySelector('tr').querySelectorAll('th').forEach((th, index) => {
+            const t = th.innerText.trim();
+            if (t.includes('應歸檔日期') || t.includes('部門') || t.includes('已逾期天數')) {
+                noWrapCenterCols.push(index);
+            }
+        });
+    }
+
     clonedTable.style.borderCollapse = 'collapse';
     clonedTable.style.width = '100%';
     clonedTable.style.fontFamily =
         "'DFKai-SB','標楷體',serif";
 
-    clonedTable.querySelectorAll('th,td')
-    .forEach(cell=>{
+    clonedTable.querySelectorAll('tr').forEach(tr => {
+        tr.querySelectorAll('th,td').forEach((cell, index) => {
+            cell.style.border = '1px solid black';
+            cell.style.padding = '8px 6px';
+            cell.style.fontFamily = "'DFKai-SB','標楷體',serif";
+            cell.style.fontSize = '12pt';
+            cell.style.verticalAlign = 'middle';
 
-        cell.style.border =
-            '1px solid black';
+            if (noWrapCenterCols.includes(index)) {
+                cell.style.whiteSpace = 'nowrap';
+                cell.style.textAlign = 'center';
+            }
 
-        cell.style.padding =
-            '8px 6px';
-
-        cell.style.fontFamily =
-            "'DFKai-SB','標楷體',serif";
-
-        cell.style.fontSize = '12pt';
-        cell.style.verticalAlign = 'middle';
-
-        if(cell.tagName === 'TH'){
-            cell.style.backgroundColor = '#d9d9d9';
-            cell.style.textAlign = 'center';
-            cell.style.fontWeight = 'bold';
-        }
-
+            if(cell.tagName === 'TH'){
+                cell.style.backgroundColor = '#d9d9d9';
+                cell.style.textAlign = 'center';
+                cell.style.fontWeight = 'bold';
+            }
+        });
     });
 
     const htmlContent = `
     <html>
     <head>
     <meta charset="utf-8">
+    <style>
+        @page WordSection1 {
+            size: 841.9pt 595.3pt;
+            margin: 1.0in 1.0in 1.0in 1.0in;
+            mso-header-margin: .5in;
+            mso-footer-margin: .5in;
+            mso-paper-source: 0;
+        }
+        div.WordSection1 {
+            page: WordSection1;
+        }
+    </style>
     </head>
     <body>
+    <div class="WordSection1">
 
     <div style="text-align:center;margin-bottom:10px;">
         <div style="
@@ -1570,6 +1605,7 @@ function exportWordReport(){
 
     ${clonedTable.outerHTML}
 
+    </div>
     </body>
     </html>
     `;
