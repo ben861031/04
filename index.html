@@ -711,7 +711,7 @@ function updateLastFileInfo(name, time) {
 }
 
 let manualTypeMap = JSON.parse(localStorage.getItem('manualTypeMap') || '{}');
-let DOC_TYPE_THRESHOLD = parseInt(localStorage.getItem('docTypeThreshold')) || 14;
+let DOC_TYPE_THRESHOLD = parseInt(localStorage.getItem('docTypeThreshold')) || 7;
 
 document.getElementById('excelFile')
 .addEventListener('change',handleFile);
@@ -1320,6 +1320,12 @@ function copyTableResult(){
 
         cell.style.wordBreak =
             "break-word";
+
+        cell.querySelectorAll('a').forEach(link => {
+            link.style.color = '#1a73e8';
+            link.style.textDecoration = 'none';
+            link.style.fontWeight = 'bold';
+        });
 
         // 主旨欄靠左
         const headerRow =
