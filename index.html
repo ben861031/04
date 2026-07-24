@@ -437,6 +437,7 @@ th.sortable.sort-desc::after { content: ' \2193'; opacity: 1; }
     <div class="nav-links">
         <a href="http://iiseng.sinotech-eng.com/SinoForm/Doc/DocArchive" target="_blank" class="nav-link">檔管作業</a>
         <a href="http://iiseng.sinotech-eng.com/SinoForm/DocReport/DocExpireReport" target="_blank" class="nav-link">原系統稽催清冊</a>
+        <a href="#" onclick="openContactSettingsModal(); return false;" class="nav-link">信件聯絡人設定</a>
     </div>
 </div>
 <div class="header-actions">
@@ -467,7 +468,7 @@ th.sortable.sort-desc::after { content: ' \2193'; opacity: 1; }
 <label class="field"><span class="field-label">關鍵字搜尋</span><input type="search" id="searchInput" placeholder="搜尋表單編號或主旨"></label>
 <label class="field"><span class="field-label">類型判斷基準</span><span class="threshold-field"><input type="number" id="thresholdInput" min="1" aria-label="類型判斷天數"> 天</span></label>
 </div>
-<div class="action-bar"><button class="button-secondary btn-danger" onclick="clearData()">清除資料</button><button class="button-secondary" onclick="copyTableResult()">複製查詢結果</button><button class="button-secondary btn-word" onclick="exportWordReport()">匯出 Word</button><button class="button-primary btn-excel" onclick="exportExcel()">匯出 Excel</button></div>
+<div class="action-bar"><button class="button-secondary btn-danger" onclick="clearData()">清除資料</button><button class="button-secondary" onclick="handleCopyClick()">複製查詢結果</button><button class="button-secondary btn-word" onclick="exportWordReport()">匯出 Word</button><button class="button-primary btn-excel" onclick="exportExcel()">匯出 Excel</button></div>
 </section>
 
 <div class="summary">
@@ -523,12 +524,206 @@ th.sortable.sort-desc::after { content: ' \2193'; opacity: 1; }
     </div>
 </div>
 
+<div id="copyFormatModal" class="modal-overlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:10000; align-items:center; justify-content:center;">
+    <div class="modal-content" style="background:#fff; border-radius:12px; padding:24px; width:90%; max-width:400px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+        <h3 style="margin-top:0; margin-bottom:16px; color:var(--navy); font-size:18px;">選擇複製格式</h3>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+            <button class="button-secondary" onclick="executeCopy(false)" style="width:100%; text-align:center;">複製表格</button>
+            <button class="button-primary" onclick="executeCopy(true)" style="width:100%; text-align:center;">複製信件範本</button>
+        </div>
+        <div style="margin-top:20px; display:flex; justify-content:flex-end;">
+            <button class="button-secondary" onclick="closeCopyFormatModal()">取消</button>
+        </div>
+    </div>
+</div>
+
+<div id="contactSettingsModal" class="modal-overlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:10000; align-items:center; justify-content:center;">
+    <div class="modal-content" style="background:#fff; border-radius:12px; padding:24px; width:90%; max-width:500px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+        <h3 style="margin-top:0; margin-bottom:16px; color:var(--navy); font-size:18px;">信件聯絡人設定</h3>
+        <p style="font-size:14px; color:var(--muted); margin-bottom:16px;">請設定各部門對應的行政聯絡人姓名，系統複製信件範本時會自動帶入。</p>
+        <div id="contactListContainer" style="max-height: 300px; overflow-y: auto; margin-bottom:16px; display:flex; flex-direction:column; gap:8px;">
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:12px;">
+            <button class="button-secondary" onclick="closeContactSettingsModal()">取消</button>
+            <button class="button-primary" onclick="saveContactSettings()">儲存</button>
+        </div>
+    </div>
+</div>
+
+<div id="subjectCopyModal" class="modal-overlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); z-index:10000; align-items:center; justify-content:center;">
+    <div class="modal-content" style="background:#fff; border-radius:12px; padding:30px; width:90%; max-width:450px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+        <h3 style="margin-top:0; margin-bottom:20px; color:var(--navy); font-size:22px; text-align:center;">信件複製中心</h3>
+        
+        <div style="background:#f5f7fa; border:1px solid var(--line); border-radius:8px; padding:16px; margin-bottom:16px;">
+            <div style="font-weight:bold; color:var(--navy); font-size:16px; margin-bottom:12px;">📍 第一步：複製信件主旨</div>
+            <div id="generatedSubjectText" style="font-weight:bold; color:var(--navy); font-size:15px; word-break:break-all; background:#fff; padding:10px; border:1px dashed var(--muted); border-radius:4px; text-align:center; margin-bottom:12px;"></div>
+            <button id="copySubjectBtn" class="button-primary" onclick="copySubjectText()" style="width:100%; text-align:center; padding:12px; font-size:16px; font-weight:bold;">複製主旨</button>
+        </div>
+
+        <div style="background:#f5f7fa; border:1px solid var(--line); border-radius:8px; padding:16px; margin-bottom:20px;">
+            <div style="font-weight:bold; color:var(--navy); font-size:16px; margin-bottom:12px;">📍 第二步：複製信件內文</div>
+            <button id="copyBodyBtn" class="button-secondary" disabled style="width:100%; text-align:center; padding:12px; font-size:16px; font-weight:bold; opacity:0.5; cursor:not-allowed;" onclick="copyBodyText()">請先完成第一步</button>
+        </div>
+        
+        <div style="text-align:center;">
+            <button class="button-secondary" onclick="closeSubjectCopyModal()" style="border:none; background:none; color:var(--muted); text-decoration:underline; cursor:pointer;">關閉視窗</button>
+        </div>
+    </div>
+</div>
+
 <script>
 
 let workbookData = null;
 let originalData = [];
 
 let currentSort = { key: '', dir: 'asc' };
+let departmentContacts = JSON.parse(localStorage.getItem('departmentContacts') || '{}');
+
+function openContactSettingsModal() {
+    const container = document.getElementById('contactListContainer');
+    container.innerHTML = '';
+    
+    // Find all unique departments from originalData
+    const departments = [...new Set(originalData.map(d => d['部門']))].filter(Boolean).sort();
+    
+    if (departments.length === 0) {
+        container.innerHTML = '<div style="color:var(--muted); text-align:center; padding: 20px;">請先匯入包含部門資料的 Excel。</div>';
+    } else {
+        departments.forEach(dept => {
+            const row = document.createElement('div');
+            row.style.display = 'flex';
+            row.style.alignItems = 'center';
+            row.style.gap = '12px';
+            
+            const label = document.createElement('div');
+            label.style.width = '120px';
+            label.style.fontWeight = 'bold';
+            label.innerText = dept;
+            
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = '聯絡人姓名 (例如: 小美)';
+            input.value = departmentContacts[dept] || '';
+            input.className = 'contact-input';
+            input.dataset.dept = dept;
+            input.style.flex = '1';
+            input.style.padding = '8px';
+            input.style.borderRadius = '6px';
+            input.style.border = '1px solid var(--line)';
+            
+            row.appendChild(label);
+            row.appendChild(input);
+            container.appendChild(row);
+        });
+    }
+    
+    document.getElementById('contactSettingsModal').style.display = 'flex';
+}
+
+function closeContactSettingsModal() {
+    document.getElementById('contactSettingsModal').style.display = 'none';
+}
+
+function saveContactSettings() {
+    const inputs = document.querySelectorAll('.contact-input');
+    inputs.forEach(input => {
+        const dept = input.dataset.dept;
+        const val = input.value.trim();
+        if (val) {
+            departmentContacts[dept] = val;
+        } else {
+            delete departmentContacts[dept];
+        }
+    });
+    localStorage.setItem('departmentContacts', JSON.stringify(departmentContacts));
+    closeContactSettingsModal();
+    showToast('聯絡人設定已儲存');
+}
+
+function handleCopyClick() {
+    const sheetName = document.getElementById('sheetSelect').value;
+    const isAllDepartments = sheetName === '全部部門' || sheetName === '請先匯入Excel';
+    
+    if (isAllDepartments) {
+        copyTableResult(false);
+    } else {
+        document.getElementById('copyFormatModal').style.display = 'flex';
+    }
+}
+
+function closeCopyFormatModal() {
+    document.getElementById('copyFormatModal').style.display = 'none';
+}
+
+function executeCopy(isTemplate) {
+    closeCopyFormatModal();
+    if (isTemplate) {
+        showSubjectCopyModal();
+    } else {
+        copyTableResult(false);
+    }
+}
+
+function closeSubjectCopyModal() {
+    document.getElementById('subjectCopyModal').style.display = 'none';
+    
+    const sBtn = document.getElementById('copySubjectBtn');
+    sBtn.innerText = '複製主旨';
+    sBtn.classList.remove('btn-excel');
+    sBtn.classList.add('button-primary');
+    
+    const bBtn = document.getElementById('copyBodyBtn');
+    bBtn.innerText = '請先完成第一步';
+    bBtn.disabled = true;
+    bBtn.style.opacity = '0.5';
+    bBtn.style.cursor = 'not-allowed';
+    bBtn.classList.remove('button-primary', 'btn-excel');
+    bBtn.classList.add('button-secondary');
+}
+
+function showSubjectCopyModal() {
+    const sheetName = document.getElementById('sheetSelect').value;
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    const subject = `【${sheetName}】公文稽催通知 (${yyyy}/${mm}/${dd})`;
+    
+    document.getElementById('generatedSubjectText').innerText = subject;
+    document.getElementById('subjectCopyModal').style.display = 'flex';
+}
+
+function copySubjectText() {
+    const subject = document.getElementById('generatedSubjectText').innerText;
+    navigator.clipboard.writeText(subject).then(() => {
+        const sBtn = document.getElementById('copySubjectBtn');
+        sBtn.innerText = '✅ 主旨已複製';
+        sBtn.classList.remove('button-primary');
+        sBtn.classList.add('btn-excel');
+        
+        const bBtn = document.getElementById('copyBodyBtn');
+        bBtn.innerText = '複製內文';
+        bBtn.disabled = false;
+        bBtn.style.opacity = '1';
+        bBtn.style.cursor = 'pointer';
+        bBtn.classList.remove('button-secondary');
+        bBtn.classList.add('button-primary');
+    }).catch(err => {
+        showToast('複製主旨失敗');
+    });
+}
+
+function copyBodyText() {
+    copyTableResult(true);
+    const bBtn = document.getElementById('copyBodyBtn');
+    bBtn.innerText = '✅ 內文已複製';
+    bBtn.classList.remove('button-primary');
+    bBtn.classList.add('btn-excel');
+    setTimeout(() => {
+        closeSubjectCopyModal();
+    }, 1500);
+}
+
 
 function showToast(message) {
     let container = document.getElementById('toastContainer');
@@ -1271,7 +1466,7 @@ window.addEventListener('DOMContentLoaded', function(){
 
 
 
-function copyTableResult(){
+function copyTableResult(isTemplate = false){
 
     const table =
         document.querySelector('table');
@@ -1462,16 +1657,44 @@ const titleHtml = `
 </div>
 </div>`;
 
-    const htmlContent =
-        titleHtml + clonedTable.outerHTML;
+    let finalHtmlContent = '';
+    let finalPlainText = '';
+
+    if (isTemplate) {
+        const sheetName = document.getElementById('sheetSelect').value;
+        const contactName = departmentContacts[sheetName] || '';
+        const count = table.querySelectorAll('tbody tr').length;
+        
+        const topHtml = `
+            <div style="font-family:'DFKai-SB','標楷體',serif;font-size:12pt;margin-bottom:12px;">
+                <p style="margin:4px 0;">${contactName} 您好：</p>
+                <br>
+                <p style="margin:4px 0;">經查<span style="color:#1769aa;font-weight:bold;">【${sheetName}】</span>有<span style="color:#d32f2f;font-weight:bold;">${count}件</span>公文已逾期，請協助提醒簽核人員儘速辦理簽出，感謝您。</p>
+            </div>
+            <hr style="border:0; border-bottom:1px solid #ccc; margin:20px 0;">
+        `;
+        const bottomHtml = `
+            <hr style="border:0; border-bottom:1px solid #ccc; margin:20px 0;">
+            <div style="font-family:'DFKai-SB','標楷體',serif;font-size:12pt;margin-top:12px;">
+                <p style="margin: 4px 0; font-weight:bold;">備註：</p>
+                <p style="margin: 4px 0;">1. 超過應歸檔日後，以Email通知部門聯絡人逾期之公文。</p>
+                <p style="margin: 4px 0;">2. 超過應歸檔日30天後，以紙本稽催單發送至部門述明辦理情形，並送部門主管簽核。</p>
+            </div>
+        `;
+        finalHtmlContent = topHtml + titleHtml + clonedTable.outerHTML + bottomHtml;
+        finalPlainText = `${contactName} 您好：\n\n經查【${sheetName}】有${count}件公文已逾期，請協助提醒簽核人員儘速辦理簽出，感謝您。\n\n` + clonedTable.innerText + `\n\n備註：\n1. 超過應歸檔日後，以Email通知部門聯絡人逾期之公文。\n2. 超過應歸檔日30天後，以紙本稽催單發送至部門述明辦理情形，並送部門主管簽核。`;
+    } else {
+        finalHtmlContent = titleHtml + clonedTable.outerHTML;
+        finalPlainText = clonedTable.innerText;
+    }
 
     const blobHtml =
-        new Blob([htmlContent], {
+        new Blob([finalHtmlContent], {
             type:'text/html'
         });
 
     const blobText =
-        new Blob([clonedTable.innerText], {
+        new Blob([finalPlainText], {
             type:'text/plain'
         });
 
@@ -1485,7 +1708,7 @@ const titleHtml = `
     navigator.clipboard.write(data)
     .then(()=>{
 
-        showToast('已複製正式表格');
+        showToast(isTemplate ? '已複製信件範本' : '已複製正式表格');
 
     });
 
