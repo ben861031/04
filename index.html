@@ -1630,7 +1630,15 @@ function exportWordReport(){
         document.createElement('a');
 
     a.href = url;
-    a.download = '稽催清冊.doc';
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    const dateStr = `${yyyy}${mm}${dd}`;
+    const deptPrefix = isAllDepartments ? '全部部門' : (sheetName === '請先匯入Excel' ? '' : sheetName);
+    const fileName = `稽催清冊_${deptPrefix ? deptPrefix + '_' : ''}${dateStr}.doc`;
+    
+    a.download = fileName;
 
     document.body.appendChild(a);
 
