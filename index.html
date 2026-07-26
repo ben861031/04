@@ -1520,6 +1520,7 @@ function copyTableResult(isTemplate = false){
             link.style.color = '#1a73e8';
             link.style.textDecoration = 'none';
             link.style.fontWeight = 'bold';
+            link.title = '點選開啟公文';
         });
 
         // 主旨欄靠左
@@ -1535,6 +1536,9 @@ function copyTableResult(isTemplate = false){
                 th.innerText.includes('案由')
             ){
                 subjectIndex = index;
+                if (!th.innerHTML.includes('(點選可開啟公文)')) {
+                    th.innerHTML = `${th.innerText}<br><span style="font-size:0.85em;color:#d32f2f;font-weight:normal;">(點選可開啟公文)</span>`;
+                }
             }
 
         });
@@ -1667,9 +1671,8 @@ const titleHtml = `
         
         const topHtml = `
             <div style="font-family:'DFKai-SB','標楷體',serif;font-size:12pt;margin-bottom:12px;">
-                <p style="margin:4px 0;">${contactName} 您好：</p>
-                <br>
-                <p style="margin:4px 0;">經查<span style="color:#1769aa;font-weight:bold;">【${sheetName}】</span>有<span style="color:#d32f2f;font-weight:bold;">${count}件</span>公文已逾期，請協助提醒簽核人員儘速辦理簽出，感謝您。</p>
+                <p style="margin:0 0 12px 0; font-weight:bold;">${contactName} 您好：</p>
+                <p style="margin:0 0 4px 0;">經查<span style="color:#1769aa;font-weight:bold;">【${sheetName}】</span>有<span style="color:#d32f2f;font-weight:bold;">${count}件</span>公文已逾期，請協助提醒簽核人員儘速辦理簽出，感謝您。</p>
             </div>
             <hr style="border:0; border-bottom:1px solid #ccc; margin:20px 0;">
         `;
